@@ -1,0 +1,5 @@
+Model,ROC AUC,Average Precision,Precision@50
+Logistic Regression,0.848,0.866,1.0
+Decision Tree,0.876,0.859,1.0
+Random Forest,0.844,0.854,0.98
+Week-4 Baseline,0.498,0.482,0.32

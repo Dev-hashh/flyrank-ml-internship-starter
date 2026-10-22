@@ -1,0 +1,11 @@
+Rank,Page Alias,Refresh Priority Score,Model Decline Probability,Confidence,Suggested Action
+1,Page-001,81.734212,0.783472,high,refresh_and_review_ctr
+2,Page-002,81.603243,0.849842,medium,refresh_and_review_ctr
+3,Page-003,81.544618,0.78949,high,refresh_and_review_ctr
+4,Page-004,81.169731,0.776297,high,refresh_and_review_ctr
+5,Page-005,80.957565,0.81601,medium,refresh_and_review_ctr
+6,Page-006,80.79809,,high,refresh_and_review_ctr
+7,Page-007,80.650656,,high,refresh_and_review_ctr
+8,Page-008,80.432641,,medium,refresh
+9,Page-009,80.428403,,medium,refresh_and_review_ctr
+10,Page-010,80.428243,,medium,refresh

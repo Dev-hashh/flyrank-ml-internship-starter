@@ -1,0 +1,3 @@
+Validation Design,ROC AUC,Average Precision,Precision@50
+Random Row Split,0.913,0.928,1.0
+Client-Group Holdout,0.844,0.854,0.98
