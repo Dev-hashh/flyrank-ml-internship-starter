@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description"
+    content="A page-level content refresh prioritization study using observable search performance, engagement, and freshness signals.">
+  <title>Prioritizing Content Refresh Opportunities | FlyRank ML-11</title>
+  <style>
+    :root {
+      --ink: #1e293b;
+      --muted: #526174;
+      --line: #dbe2ea;
+      --bg: #f7f9fc;
+      --accent: #176b63;
+      --card: #fff
+    }
+
+    * {
+      box-sizing: border-box
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font: 16px/1.65 system-ui, -apple-system, Segoe UI, Roboto, sans-serif
+    }
+
+    header {
+      background: #102a2a;
+      color: #fff;
+      padding: 4rem max(1.2rem, calc((100% - 1000px)/2))
+    }
+
+    header .eyebrow {
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-size: .78rem;
+      color: #b9dcd6;
+      font-weight: 700
+    }
+
+    header h1 {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      line-height: 1.12;
+      max-width: 850px;
+      margin: .8rem 0 1rem
+    }
+
+    header p {
+      max-width: 780px;
+      color: #e0eceb;
+      font-size: 1.1rem
+    }
+
+    main {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1.2rem
+    }
+
+    nav {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: 1rem;
+      border-radius: 12px;
+      margin-bottom: 2rem
+    }
+
+    nav a {
+      color: var(--accent);
+      margin: .25rem .7rem .25rem 0;
+      display: inline-block
+    }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: clamp(1.2rem, 3vw, 2rem);
+      margin: 1.25rem 0
+    }
+
+    h2 {
+      line-height: 1.25;
+      margin-top: 0
+    }
+
+    h3 {
+      margin-bottom: .3rem
+    }
+
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 1rem
+    }
+
+    .kpi {
+      border: 1px solid var(--line);
+      padding: 1rem;
+      border-radius: 10px
+    }
+
+    .kpi strong {
+      display: block;
+      font-size: 1.7rem;
+      color: var(--accent)
+    }
+
+    figure {
+      margin: 1.5rem 0
+    }
+
+    figure img {
+      max-width: 100%;
+      height: auto;
+      border: 1px solid var(--line);
+      border-radius: 8px
+    }
+
+    figcaption,
+    .muted {
+      color: var(--muted);
+      font-size: .92rem
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 1rem 0
+    }
+
+    th,
+    td {
+      padding: .7rem;
+      text-align: left;
+      border-bottom: 1px solid var(--line)
+    }
+
+    th {
+      background: #f0f5f5
+    }
+
+    .tablewrap {
+      overflow-x: auto
+    }
+
+    .note {
+      border-left: 4px solid var(--accent);
+      padding: .7rem 1rem;
+      background: #f0f7f6
+    }
+
+    footer {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 0 1.2rem 3rem;
+      color: var(--muted);
+      font-size: .9rem
+    }
+
+    a {
+      color: var(--accent)
+    }
+
+    code {
+      overflow-wrap: anywhere
+    }
+
+    @media(max-width:600px) {
+      header {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem
+      }
+
+      table {
+        font-size: .9rem
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="eyebrow">FlyRank ML Internship · ML-11 Ship the Paper</div>
+    <h1>Prioritizing Content Refresh Opportunities</h1>
+    <p>Can observable search performance, engagement, and freshness signals help rank website pages for content-refresh
+      review?</p>
+    <p class="muted">Research artifact · Page-level prioritization · Observational analysis</p>
+  </header>
+  <main>
+    <nav aria-label="Page contents">
+      <strong>On this page:</strong>
+      <a href="#abstract">Abstract</a><a href="#question">Question</a><a href="#data">Data</a>
+      <a href="#method">Methodology</a><a href="#results">Results</a><a href="#limits">Limitations</a>
+      <a href="#playbook">Action playbook</a><a href="#reproduce">Reproducibility</a>
+    </nav>
+    <section id="abstract">
+      <h2>Abstract</h2>
+      <p>This study asks whether observable search-performance, engagement, and freshness signals can help prioritize
+        existing website pages for content-refresh review. It frames the task as page-level ranking and compares a
+        rule-based baseline with logistic regression, a decision tree, and a random forest. In the uploaded notebook
+        outputs, the decision tree reports the highest ROC AUC (0.876), while logistic regression and the decision tree
+        both report Precision@50 of 1.000 on the client-group holdout evaluation. A validation audit shows lower
+        performance under client-group holdout than under a random-row split, illustrating why the validation design
+        matters. The ranking is intended to guide human review; it does not establish that refreshing a page causes
+        improved search performance.</p>
+      <div class="note"><strong>Interpretation:</strong> These metrics are taken from saved outputs in the supplied
+        notebooks. Re-run the notebook pipeline and confirm that the figures match the final version before treating the
+        page as a finalized report.</div>
+    </section>
+    <section id="question">
+      <h2>1. Research question and decision</h2>
+      <p><strong>Research question:</strong> Can observable search performance, engagement, and freshness signals be
+        used to rank website pages by priority for content refresh?</p>
+      <p><strong>Decision supported:</strong> Which pages should a content or SEO team inspect first? The unit of
+        analysis is one page per row, and the output is a ranked list with a refresh-priority score.</p>
+    </section>
+    <section id="data">
+      <h2>2. Data</h2>
+      <p>The supplied project report describes a pseudonymized starter dataset with 30,000 page-level rows and 44
+        columns. The associated label is <code>is_declining_label</code>, derived from the observed trend direction. The
+        saved notebooks' outputs are used here as the reported evidence; this page does not claim that the full
+        warehouse was processed.</p>
+      <p>Private client names, domains, URLs, private search queries, page titles, credentials, and other identifying
+        information should not be included in public artifacts. The ranked sample below uses synthetic aliases.</p>
+    </section>
+    <section id="method">
+      <h2>3. Methodology</h2>
+      <h3>Target and features</h3>
+      <p>The target is a proxy label for observed decline, not a future refresh outcome. Candidate predictors include
+        visibility, click and impression signals, average position, freshness, and content characteristics where
+        available.</p>
+      <h3>Models and baseline</h3>
+      <p>The supplied notebook outputs compare logistic regression, a decision tree, and a random forest with a Week-4
+        baseline. Metrics are ROC AUC, average precision, and Precision@50. The client-group holdout is the primary
+        generalization check because pages from a held-out client should not be shared across train and test.</p>
+      <h3>Leakage and validation</h3>
+      <p>Features directly defining the target, such as <code>trend_direction</code> or <code>trend_pct</code>, must not
+        be used as predictors. The validation audit compares a random-row split with a client-group holdout; the
+        difference should be disclosed rather than selecting only the more favorable result.</p>
+    </section>
+    <section id="results">
+      <h2>4. Results</h2>
+      <div class="kpis">
+        <div class="kpi"><span class="muted">Highest ROC AUC</span><strong>0.876</strong><span>Decision tree</span>
+        </div>
+        <div class="kpi"><span class="muted">Highest Average Precision</span><strong>0.866</strong><span>Logistic
+            regression</span></div>
+        <div class="kpi"><span class="muted">Precision@50</span><strong>1.000</strong><span>Logistic regression and
+            decision tree</span></div>
+      </div>
+      <div class="tablewrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Method</th>
+              <th>ROC AUC</th>
+              <th>Average Precision</th>
+              <th>Precision@50</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Logistic Regression</td>
+              <td>0.848</td>
+              <td>0.866</td>
+              <td>1.000</td>
+            </tr>
+            <tr>
+              <td>Decision Tree</td>
+              <td>0.876</td>
+              <td>0.859</td>
+              <td>1.000</td>
+            </tr>
+            <tr>
+              <td>Random Forest</td>
+              <td>0.844</td>
+              <td>0.854</td>
+              <td>0.980</td>
+            </tr>
+            <tr>
+              <td>Week-4 Baseline</td>
+              <td>0.498</td>
+              <td>0.482</td>
+              <td>0.320</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <figure><img src="assets/model_comparison.png"
+          alt="Bar charts comparing ROC AUC, average precision and Precision at 50 across four methods">
+        <figcaption>Figure 1. Model metrics from the saved notebook output. All methods should be compared on the same
+          client-group holdout split.</figcaption>
+      </figure>
+      <figure><img src="assets/validation_design_comparison.png"
+          alt="Comparison of random-row split and client-group holdout metrics">
+        <figcaption>Figure 2. Validation design sensitivity. The random-row split reports higher metrics than
+          client-group holdout in the saved audit output.</figcaption>
+      </figure>
+      <p>The decision tree has the highest ROC AUC in these saved results, while logistic regression has the highest
+        average precision. Logistic regression and the decision tree tie on Precision@50. The preferred model therefore
+        depends on the intended operating objective; it should not be chosen from one metric without considering
+        validation and review capacity.</p>
+    </section>
+    <section id="limits">
+      <h2>5. Limitations</h2>
+      <ul>
+        <li><strong>Proxy label:</strong> observed decline is not the same as verified future performance or refresh
+          success.</li>
+        <li><strong>Observational data:</strong> the results do not establish a causal effect of refreshing content.
+        </li>
+        <li><strong>Generalization:</strong> performance may differ across clients, verticals, search markets, and time
+          periods.</li>
+        <li><strong>Evaluation sensitivity:</strong> random-row validation appears more optimistic than client-group
+          holdout in the supplied audit.</li>
+        <li><strong>Human review required:</strong> editorial quality, search intent, business context, and factual
+          accuracy are not fully represented by the score.</li>
+      </ul>
+    </section>
+    <section id="playbook">
+      <h2>6. Ranked recommendations: action playbook</h2>
+      <ol>
+        <li><strong>Review high-ranked pages first.</strong> Confirm that the signals are valid and the page is still
+          relevant.</li>
+        <li><strong>Diagnose the likely issue.</strong> Inspect impressions, clicks, CTR, average position, freshness
+          and engagement indicators.</li>
+        <li><strong>Choose a targeted intervention.</strong> Update stale facts, address search-intent mismatch, or
+          review search-result presentation when appropriate.</li>
+        <li><strong>Measure outcomes after changes.</strong> Compare post-refresh metrics with a documented pre-refresh
+          baseline and, where possible, a comparison group.</li>
+        <li><strong>Reassess the ranking.</strong> Monitor usefulness and revise the workflow as new outcome evidence
+          becomes available.</li>
+      </ol>
+      <p class="note">A high score means “review earlier,” not “refresh automatically.”</p>
+      <h3>Anonymized ranking sample</h3>
+      <p>The downloadable CSV contains synthetic page aliases and fields visible in the supplied saved output. It is a
+        small sample, not the full ranked queue.</p>
+      <p><a href="assets/anonymized_top_ranked_pages.csv">Download anonymized top-ranked pages (CSV)</a> · <a
+          href="assets/action_summary.csv">Download action summary (CSV)</a></p>
+      <figure><img src="assets/action_distribution.png" alt="Distribution of recommended action categories">
+        <figcaption>Figure 3. Action-category distribution from the saved action-playbook output.</figcaption>
+      </figure>
+    </section>
+    <section id="reproduce">
+      <h2>7. Reproducibility and credits</h2>
+      <p>Source repository: <a
+          href="https://github.com/Dev-hashh/flyrank-ml-internship-starter">Dev-hashh/flyrank-ml-internship-starter</a>.
+      </p>
+      <p>Relevant notebooks used for the saved outputs: <code>w04_baseline_score</code>, <code>w05_model</code>,
+        <code>w06_validation_audit</code>, and <code>w07_action_playbook</code>. Link these files directly in the
+        repository before final submission if they are committed there.</p>
+      <p>Metrics and charts should be regenerated from the committed notebook outputs when the final pipeline is rerun.
+        The exact software environment and data version should be documented in the repository.</p>
+      <p><strong>Data credit:</strong> Built on the <a href="https://flyrank.ai">FlyRank ML Internship dataset</a>.</p>
+    </section>
+  </main>
+  <footer>
+    <p>Research artifact for the FlyRank ML Internship capstone. This page is a draft generated from the uploaded
+      notebook outputs; verify figures, links, and data descriptions before public release.</p>
+  </footer>
+</body>
+
+</html>
